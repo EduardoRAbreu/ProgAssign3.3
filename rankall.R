@@ -24,9 +24,10 @@ rankall <- function(outcome, num = "best"){
   names(dataframe) <- c("State", "hospital", "outcome")
   sorted <- dataframe[order(dataframe$State, dataframe$outcome, dataframe$hospital),]
   results <- data.frame()
+  sought_hospital <- data.frame()
   
   for (i in seq_along(valid_state)){
-    state_subset <- subset(sorted, State == valid_state[i])
+    state_subset <- subset(sorted, State == valid_state[i], drop = FALSE)
     
     if(num == "best"){
     num <- 1
@@ -35,7 +36,9 @@ rankall <- function(outcome, num = "best"){
     }else{
       num <- as.numeric(num)
     }
-  results <- rbind(results, state_subset["hospital", "State"])
+    sought_hospital <- state_subset[num, 2:1]
+    
+    results <- rbind(results, sought_hospital)
   }
   
   return(results)
